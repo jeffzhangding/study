@@ -70,6 +70,12 @@ class Solution:
                     res += v * v3
         return res
 
+
+def f2():
+    """背包问题"""
+
+
+
 if __name__ == '__main__':
     s = 1
     # n = [1, 1, 1, 1, 1]
