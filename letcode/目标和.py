@@ -71,16 +71,26 @@ class Solution:
         return res
 
 
-def f2():
-    """背包问题"""
+    def f2(self, nums, S):
+        """"""
+        sum_nums = sum(nums)
+        if sum_nums < S or (S + sum_nums) % 2 != 0:
+            return 0
 
-
+        target = (S + sum_nums) >> 1
+        mem = [0] * (target + 1)
+        mem[0] = 1
+        for num in nums:
+            for i in range(target, num - 1, -1):
+                mem[i] += mem[i - num]
+        return mem[target]
 
 if __name__ == '__main__':
     s = 1
     # n = [1, 1, 1, 1, 1]
     n = [0,0,0,0,0,0,0,0,1]
-    res = Solution().findTargetSumWays(n, s)
+    # res = Solution().findTargetSumWays(n, s)
+    res = Solution().f2(n, s)
     print(res)
 
 
