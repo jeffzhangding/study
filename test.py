@@ -90,10 +90,24 @@ def test2():
     print(a * a.T)
 
 
+class A(object):
+    """"""
+
+    def __init__(self):
+        """"""
+        self.name = 'aaa'
+
+    def __getitem__(self, item):
+        return self.__getattribute__(item)
+
+
 if __name__ == '__main__':
     # chinese()
     # chinese()
     # test1()
     # test1()
-    test2()
+    # test2()
+    a = A()
+    print(a.name)
+
 
