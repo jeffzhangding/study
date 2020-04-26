@@ -23,8 +23,42 @@ p= \infty 切比雪夫距离
 """
 
 
+from itertools import combinations
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from collections import Counter
+
+
 class Data(object):
     """"""
+
+    def __init__(self):
+        """"""
+        self.df = self.iris()
+
+    def get_test_data(self):
+        """"""
+
+    def iris(self):
+        """"""
+        iris = load_iris()
+        df = pd.DataFrame(iris.data, columns=iris.feature_names)
+        df['label'] = iris.target
+        df.columns = ['sepal length', 'sepal width', 'petal length', 'petal width', 'label']
+        # self.df = df
+        return df
+
+    def show(self):
+        plt.scatter(self.df[:50]['sepal length'], self.df[:50]['sepal width'], label='0')
+        plt.scatter(self.df[50:100]['sepal length'], self.df[50:100]['sepal width'], label='1')
+        plt.xlabel('sepal length')
+        plt.ylabel('sepal width')
+        plt.legend()
+        plt.show()
 
 
 class Knn(object):
@@ -36,4 +70,11 @@ class Knn(object):
 
 class SkitKnn(object):
     """"""
+
+
+if __name__ == '__main__':
+    d = Data()
+
+    print(d.df)
+    d.show()
 
