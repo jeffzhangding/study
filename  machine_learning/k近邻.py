@@ -27,10 +27,11 @@ from itertools import combinations
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from collections import Counter
+from matplotlib.colors import ListedColormap
+from sklearn import neighbors, datasets
 
 
 class Data(object):
@@ -60,21 +61,109 @@ class Data(object):
         plt.legend()
         plt.show()
 
+    @property
+    def data(self):
+        iris = load_iris()
+        # data = np.array(self.df.iloc[:100, [0, 1, -1]])
+        data = iris['data']
+        target = iris['target']
+        x, y = data[::2], target[::2]
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+        return x_train, x_test, y_train, y_test
+
 
 class Knn(object):
     """"""
 
-    def fit(self):
+    def __init__(self, x_train, y_train, k=3, p=2):
         """"""
+        self.k = k
+        self.p = p
+        self.x_train = x_train
+        self.y_train = y_train
+
+    def predict(self, x):
+        """"""
+        dist = np.linalg.norm(x - self.x_train, axis=1, ord=self.p)
+        index = np.argpartition(dist, self.k)[:self.k]
+        y = self.y_train[index]
+        r_dict = Counter(y)
+        res = max(r_dict.items(), key=lambda v: v[1])
+        return res[0]
+
+    def score(self, x_test, y_test):
+        """"""
+        sucess = 0.0
+        for i in range(len(x_test)):
+            res = self.predict(x_test[i])
+            print('pridict %s ===  lable: %s ' % (res, y_test[i]))
+            if res == y_test[i]:
+                sucess += 1
+        return sucess / len(x_test)
+
+    def skt_data(self):
+        """"""
+        d = Data()
+        x_train, x_test, y_train, y_test = d.data
+        print(d.df)
+        d.show()
+        model = Knn(x_train, y_train, k=10, p=2)
+        score = model.score(x_test, y_test)
+        print(score)
+
+
+def knn_test():
+    d = Data()
+    x_train, x_test, y_train, y_test = d.data
+    # print(d.df)
+    # d.show()
+    model = Knn(x_train, y_train, k=10, p=2)
+    score = model.score(x_test, y_test)
+    print('jeff knn mode: == %s' % str(score))
 
 
 class SkitKnn(object):
     """"""
 
+    def __init__(self, x_train, y_train, k=None, weights='distance'):
+        """"""
+        self.model = neighbors.KNeighborsClassifier(k, weights=weights)
+        self.model.fit(x_train, y_train)
+
+    def predict(self, x, show=True):
+        """"""
+        # x_min, x_max = x[:, 0].min() - 1, x[:, 0].max() + 1
+        # y_min, y_max = x[:, 1].min() - 1, x[:, 1].max() + 1
+        # xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+        #                      np.arange(y_min, y_max, h))
+        res = self.model.predict([x])
+        return res
+
+    def score(self, x_test, y_test):
+        """"""
+        sucess = 0.0
+        for i in range(len(x_test)):
+            res = self.predict(x_test[i])
+            print('pridict %s ===  lable: %s ' % (res, y_test[i]))
+            if res == y_test[i]:
+                sucess += 1
+        return sucess / len(x_test)
+
+
+def skt_test():
+    """"""
+    d = Data()
+    x_train, x_test, y_train, y_test = d.data
+    # print(d.df)
+    # d.show()
+    model = SkitKnn(x_train, y_train, k=10)
+    score = model.score(x_test, y_test)
+    # score = model.model.score(x_test, y_test)
+    print('skit mode: == %s' % str(score))
+
 
 if __name__ == '__main__':
-    d = Data()
+    # skt_test()
+    knn_test()
 
-    print(d.df)
-    d.show()
 
