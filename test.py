@@ -96,9 +96,57 @@ class A(object):
     def __init__(self):
         """"""
         self.name = 'aaa'
+        self.a = 'aaa'
 
     def __getitem__(self, item):
         return self.__getattribute__(item)
+
+
+class B(object):
+
+    def __init__(self):
+        self.b = 'bbb'
+
+
+class C(A, B):
+    """"""
+
+
+class ScenesEnv(dict):
+    """"""
+
+    def __init__(self, *args, **kwargs):
+        super(ScenesEnv, self).__init__(*args, **kwargs)
+        self.b = 'bbb'
+
+    def __getattr__(self, item):
+        return self.get(item)
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
+
+class JeffType(type):
+
+    def __init__(self, what, bases=None, dict=None):
+        """"""
+        super(JeffType, self).__init__((what, bases, dict))
+        if dict is not None and bases is not None:
+            self.class_name = what
+
+
+class J(object, metaclass=JeffType):
+
+    # __metaclass__ = JeffType
+
+    def test(self):
+        print(self.class_name)
+
+
+class J2(J):
+
+    def test(self):
+        print(self.class_name)
 
 
 if __name__ == '__main__':
@@ -107,7 +155,14 @@ if __name__ == '__main__':
     # test1()
     # test1()
     # test2()
-    a = A()
-    print(a.name)
-
-
+    # a = A()
+    # print(a.name)
+    # c = C()
+    # print(c.a)
+    # print(c.b)
+    # s = ScenesEnv(a='a')
+    # print(s['a'])
+    # print(s.a)
+    # print(s.b)
+    # print(s['b'])
+    J2().test()
