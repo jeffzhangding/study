@@ -149,6 +149,50 @@ class J2(J):
         print(self.class_name)
 
 
+x = {
+    'a': 'a1',
+    'b': 'a1',
+    'c': 'a1',
+}
+
+
+class M(object):
+
+    # def __new__(cls, *args, **kwargs):
+    #     print('=====')
+    #     ins = super(M, cls).__new__(cls, **kwargs)
+    #     # return x
+    #     return ins
+
+    def __init__(self, *args, **kwargs):
+        super(M, self).__init__()
+        print('=====')
+        # self.__dict__ = x
+        # self['d'] = 'ddd'
+        self.d = 'ddd'
+
+    def test(self):
+        print('123145674874test')
+
+    # def __setattr__(self, key, value):
+    #     return super(M, self).__setattr__(key, value)
+
+    # def __set
+
+    def __getattr__(self, item):
+        print('===')
+        return 'test_aaa'
+
+    # def __getattribute__(self, item):
+    #     res = super(M, self).__getattribute__(item)
+    #     return res
+
+    def __getitem__(self, item):
+        pass
+
+    def __setitem__(self, key, value):
+        pass
+
 if __name__ == '__main__':
     # chinese()
     # chinese()
@@ -165,4 +209,9 @@ if __name__ == '__main__':
     # print(s.a)
     # print(s.b)
     # print(s['b'])
-    J2().test()
+    # J2().test()
+    a = M('aaa', 'bbb')
+    # a.test()
+    a.d = '333'
+    print(a['a'])
+
